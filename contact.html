@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="contact_container">
+        <a class="homePage" href="index.html">Back to Homepage</a>
+        <h1 class="contact_header">Contact Me!</h1>
+        <div class="form">
+            <form action="email.php" method="POST" >
+
+                <input type="text" name="name" id="name" placeholder="Name" required>
+                <input type="email" name="email" placeholder="Email" id="email" required>
+                <input type="text" name="subject" id="subject" placeholder="Subject" required>
+                <textarea name="message" id="" cols="30" rows="10" placeholder="Message" required></textarea>
+                <input type="submit" value="Send Your Email">
+            </form>
+        </div>
+    </div>
+    
+</body>
+</html>
