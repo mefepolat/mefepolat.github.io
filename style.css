@@ -405,7 +405,15 @@ article .icon {
 }
 
 .project-description {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.project-img-1 {
+  width: 18.2%;
+}
+
+.project-img-3 {
+    width: 35%;
 }
 
 /* CONTACT */
