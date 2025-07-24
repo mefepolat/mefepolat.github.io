@@ -6,12 +6,12 @@ function toggleMenu() {
   icon.classList.toggle("open");
 }
 
-// ANIMATED BACKGROUND PARTICLES
+// ANIMATED BACKGROUND PARTICLES (OPTIMIZED)
 function createParticles() {
   const particlesContainer = document.querySelector('.floating-particles');
   
-  // Create additional floating particles
-  for (let i = 0; i < 15; i++) {
+  // Create fewer particles for better performance
+  for (let i = 0; i < 8; i++) {
     const particle = document.createElement('div');
     particle.className = 'particle';
     particle.style.cssText = `
@@ -20,12 +20,13 @@ function createParticles() {
       height: 2px;
       background: #00ffff;
       border-radius: 50%;
-      box-shadow: 0 0 10px #00ffff;
+      box-shadow: 0 0 8px #00ffff;
       animation: float ${20 + Math.random() * 10}s infinite linear;
       animation-delay: ${Math.random() * 20}s;
       left: ${Math.random() * 100}%;
       top: ${Math.random() * 100}%;
-      opacity: ${0.3 + Math.random() * 0.7};
+      opacity: ${0.4 + Math.random() * 0.5};
+      will-change: transform;
     `;
     particlesContainer.appendChild(particle);
   }
@@ -65,22 +66,26 @@ function typeWriter(element, text, speed = 100) {
   type();
 }
 
-// GLITCH EFFECT
+// GLITCH EFFECT (OPTIMIZED)
 function addGlitchEffect() {
   const title = document.querySelector('.glitch-effect');
   if (title) {
+    let isGlitching = false;
+    
     setInterval(() => {
-      if (Math.random() < 0.1) {
+      if (Math.random() < 0.05 && !isGlitching) { // Reduced frequency and prevent overlap
+        isGlitching = true;
         title.style.textShadow = `
-          ${Math.random() * 10 - 5}px 0 #ff0080,
-          ${Math.random() * 10 - 5}px 0 #00ffff,
-          ${Math.random() * 10 - 5}px 0 #8000ff
+          ${Math.random() * 8 - 4}px 0 #ff0080,
+          ${Math.random() * 8 - 4}px 0 #00ffff,
+          ${Math.random() * 8 - 4}px 0 #8000ff
         `;
         setTimeout(() => {
           title.style.textShadow = '0 0 20px #00ffff';
-        }, 50);
+          isGlitching = false;
+        }, 80);
       }
-    }, 100);
+    }, 200); // Reduced frequency from 100ms to 200ms
   }
 }
 
@@ -118,64 +123,84 @@ function addFloatingAnimation() {
   });
 }
 
-// PARALLAX EFFECT FOR SECTIONS
+// PARALLAX EFFECT FOR SECTIONS (THROTTLED)
 function addParallaxEffect() {
-  window.addEventListener('scroll', () => {
+  let ticking = false;
+  
+  function updateParallax() {
     const scrolled = window.pageYOffset;
-    const parallaxElements = document.querySelectorAll('.profile-glow, .about-overlay');
+    const parallaxElements = document.querySelectorAll('.profile-glow');
     
     parallaxElements.forEach(element => {
       const speed = 0.5;
-      element.style.transform = `translateY(${scrolled * speed}px)`;
+      element.style.transform = `translate3d(0, ${scrolled * speed}px, 0)`;
     });
-  });
+    
+    ticking = false;
+  }
+  
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
-// CURSOR TRAIL EFFECT
+// CURSOR TRAIL EFFECT (OPTIMIZED)
 function createCursorTrail() {
   const trail = [];
-  const trailLength = 10;
+  const trailLength = 6; // Reduced from 10
+  const positions = [];
   
   for (let i = 0; i < trailLength; i++) {
     const dot = document.createElement('div');
     dot.className = 'cursor-trail';
     dot.style.cssText = `
       position: fixed;
-      width: 4px;
-      height: 4px;
+      width: 3px;
+      height: 3px;
       background: #00ffff;
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
-      opacity: ${1 - i / trailLength};
+      opacity: ${(1 - i / trailLength) * 0.8};
       transform: scale(${1 - i / trailLength});
-      transition: all 0.1s ease;
-      box-shadow: 0 0 10px #00ffff;
+      will-change: transform;
+      box-shadow: 0 0 8px #00ffff;
     `;
     document.body.appendChild(dot);
     trail.push(dot);
+    positions.push({ x: 0, y: 0 });
   }
   
   let mouseX = 0, mouseY = 0;
+  let lastUpdate = 0;
   
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-  });
+  }, { passive: true });
   
-  function animateTrail() {
-    let x = mouseX, y = mouseY;
-    
-    trail.forEach((dot, index) => {
-      const nextDot = trail[index + 1] || trail[0];
-      dot.style.left = x + 'px';
-      dot.style.top = y + 'px';
+  function animateTrail(timestamp) {
+    if (timestamp - lastUpdate > 16) { // Limit to ~60fps
+      positions[0].x = mouseX;
+      positions[0].y = mouseY;
       
-      if (nextDot) {
-        x += (nextDot.offsetLeft - x) * 0.3;
-        y += (nextDot.offsetTop - y) * 0.3;
+      for (let i = 1; i < trailLength; i++) {
+        const prev = positions[i - 1];
+        const curr = positions[i];
+        curr.x += (prev.x - curr.x) * 0.2;
+        curr.y += (prev.y - curr.y) * 0.2;
       }
-    });
+      
+      trail.forEach((dot, index) => {
+        const pos = positions[index];
+        dot.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) scale(${1 - index / trailLength})`;
+      });
+      
+      lastUpdate = timestamp;
+    }
     
     requestAnimationFrame(animateTrail);
   }
@@ -202,7 +227,7 @@ function addScrollRevealAnimation() {
   cards.forEach(card => {
     card.style.opacity = '0';
     card.style.transform = 'translateY(30px)';
-    card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+    card.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
     observer.observe(card);
   });
 }
@@ -251,14 +276,16 @@ function addButtonEffects() {
   });
 }
 
-// NAVIGATION ACTIVE STATE
+// NAVIGATION ACTIVE STATE (THROTTLED)
 function updateActiveNavigation() {
   const sections = document.querySelectorAll('section');
   const navLinks = document.querySelectorAll('.nav-links a');
+  let ticking = false;
+  let navHeight = null;
   
-  window.addEventListener('scroll', () => {
+  function updateNav() {
     let current = '';
-    const navHeight = document.querySelector('nav').offsetHeight;
+    if (!navHeight) navHeight = document.querySelector('nav').offsetHeight;
     
     sections.forEach(section => {
       const sectionTop = section.offsetTop - navHeight - 100;
@@ -275,26 +302,60 @@ function updateActiveNavigation() {
         link.classList.add('active');
       }
     });
+    
+    ticking = false;
+  }
+  
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateNav);
+      ticking = true;
+    }
+  }, { passive: true });
+}
+
+// PROJECT CARD INTERACTION (OPTIMIZED)
+function addProjectCardEffects() {
+  const articleContainers = document.querySelectorAll('.project-card .article-container');
+  
+  articleContainers.forEach(container => {
+    const img = container.querySelector('.project-img');
+    
+    container.addEventListener('mouseenter', () => {
+      if (img) {
+        img.style.transform = 'scale(1.03)';
+        img.style.filter = 'brightness(0.8)';
+      }
+    }, { passive: true });
+    
+    container.addEventListener('mouseleave', () => {
+      if (img) {
+        img.style.transform = 'scale(1)';
+        img.style.filter = 'brightness(1)';
+      }
+    }, { passive: true });
   });
 }
 
-// PROJECT CARD INTERACTION
-function addProjectCardEffects() {
-  const projectCards = document.querySelectorAll('.project-card');
+// OPTIMIZE CARD HOVER PERFORMANCE
+function optimizeCardHoverPerformance() {
+  const cardHoverElements = document.querySelectorAll('.card-hover');
   
-  projectCards.forEach(card => {
-    const overlay = card.querySelector('.project-overlay');
-    const img = card.querySelector('.project-img');
-    
+  cardHoverElements.forEach(card => {
     card.addEventListener('mouseenter', () => {
-      if (overlay) overlay.style.opacity = '1';
-      if (img) img.style.transform = 'scale(1.05)';
-    });
+      card.style.willChange = 'transform, border-color';
+    }, { passive: true });
     
     card.addEventListener('mouseleave', () => {
-      if (overlay) overlay.style.opacity = '0';
-      if (img) img.style.transform = 'scale(1)';
-    });
+      card.style.willChange = 'auto';
+    }, { passive: true });
+    
+    // Clean up will-change after transition completes
+    card.addEventListener('transitionend', () => {
+      if (!card.matches(':hover')) {
+        card.style.willChange = 'auto';
+      }
+    }, { passive: true });
   });
 }
 
@@ -310,6 +371,7 @@ function initializeEffects() {
   addScrollRevealAnimation();
   addButtonEffects();
   addProjectCardEffects();
+  optimizeCardHoverPerformance(); // Call the new function here
   
   // Scroll-based effects
   animateSkillBars();
