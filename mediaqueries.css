@@ -1,5 +1,9 @@
 /* TABLET AND SMALLER SCREENS */
 @media screen and (max-width: 1400px) {
+  html, body {
+    overflow-x: hidden;
+  }
+  
   #profile {
     height: 83vh;
     margin-bottom: 6rem;
@@ -24,13 +28,28 @@
   }
 }
 
-@media screen and (max-width: 1200px) {
+/* ADDITIONAL MOBILE BREAKPOINT */
+@media screen and (max-width: 900px) {
   #desktop-nav {
-    display: none;
+    display: flex !important;
+    visibility: visible !important;
   }
   
   #hamburger-nav {
-    display: flex;
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  #desktop-nav {
+    display: flex !important;
+    visibility: visible !important;
+  }
+  
+  #hamburger-nav {
+    display: none !important;
+    visibility: hidden !important;
   }
   
   #experience,
@@ -44,7 +63,7 @@
   }
   
   .arrow {
-    display: none;
+    display: none !important;
   }
   
   section,
@@ -99,9 +118,75 @@
 
 /* MOBILE PHONES */
 @media screen and (max-width: 768px) {
-  nav {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  #desktop-nav {
+    display: flex !important;
+    visibility: visible !important;
+  }
+  
+  #hamburger-nav {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+  nav#desktop-nav {
     height: 15vh;
     padding: 0 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+  }
+  
+  nav#desktop-nav > div:first-child {
+    flex-shrink: 0;
+  }
+  
+  nav#desktop-nav > div:last-child {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 1rem;
+    font-size: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .nav-links li {
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-links a {
+    padding: 0.5rem;
+    font-size: 1rem;
+    display: block;
+    text-align: center;
+  }
+  
+  /* Hide any elements that might extend beyond viewport */
+  .arrow {
+    display: none !important;
   }
   
   .logo-text {
@@ -113,7 +198,7 @@
   }
   
   #profile {
-    margin-top: 6rem;
+    margin-top: 10rem;
     height: fit-content;
   }
   
@@ -160,6 +245,9 @@
   section {
     margin: 0 3%;
     padding-top: 2vh;
+    width: calc(100% - 6%);
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .section-container {
@@ -300,6 +388,12 @@
     display: none !important;
   }
   
+  /* Ensure absolutely positioned elements don't cause overflow */
+  .floating-particles::before,
+  .floating-particles::after {
+    display: none !important;
+  }
+  
   .floating-particles {
     opacity: 0.3;
   }
@@ -311,8 +405,60 @@
 
 /* SMALL MOBILE PHONES */
 @media screen and (max-width: 480px) {
-  nav {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  #desktop-nav {
+    display: flex !important;
+  }
+  
+  #hamburger-nav {
+    display: none !important;
+  }
+  
+  nav#desktop-nav {
     height: 12vh;
+    padding: 0 0.8rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  nav#desktop-nav > div:first-child {
+    flex-shrink: 0;
+  }
+  
+  nav#desktop-nav > div:last-child {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links li {
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  
+  .nav-links a {
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    display: block;
+    text-align: center;
   }
   
   .logo-text {
@@ -324,7 +470,7 @@
   }
   
   #profile {
-    margin-top: 4rem;
+    margin-top: 8rem;
   }
   
   .section__pic-container-1,
@@ -353,6 +499,9 @@
   
   section {
     margin: 0 2%;
+    width: calc(100% - 4%);
+    max-width: 100%;
+    box-sizing: border-box;
   }
   
   .details-container {
@@ -406,8 +555,52 @@
 
 /* VERY SMALL SCREENS */
 @media screen and (max-width: 360px) {
+  #desktop-nav {
+    display: flex !important;
+  }
+  
+  #hamburger-nav {
+    display: none !important;
+  }
+  
   .logo-text {
     font-size: 1rem;
+  }
+  
+  nav#desktop-nav > div:first-child {
+    flex-shrink: 0;
+  }
+  
+  nav#desktop-nav > div:last-child {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links li {
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  
+  .nav-links a {
+    padding: 0.3rem;
+    font-size: 0.8rem;
+    display: block;
+    text-align: center;
   }
   
   .title {
@@ -505,6 +698,53 @@
   /* Already dark by default, but we can enhance for systems that prefer dark */
   .contact-info-container {
     background: rgba(42, 42, 42, 0.7);
+  }
+}
+
+/* MOBILE DESKTOP NAVIGATION - ENSURE PROPER CENTERING */
+@media screen and (max-width: 900px) {
+  nav#desktop-nav {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  nav#hamburger-nav {
+    display: none !important;
+  }
+  
+  nav#desktop-nav > div:last-child {
+    flex: 1 !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+  
+  nav#desktop-nav .nav-links {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 0.8rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+  
+  nav#desktop-nav .nav-links li {
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  nav#desktop-nav .nav-links a {
+    padding: 0.4rem 0.6rem !important;
+    white-space: nowrap !important;
+    font-size: 1rem !important;
+    display: block !important;
+    text-align: center !important;
   }
 }
 

@@ -418,9 +418,31 @@ function handleResize() {
   }
 }
 
+// ENSURE NAVIGATION VISIBILITY
+function ensureNavigationVisibility() {
+  const desktopNav = document.getElementById('desktop-nav');
+  const hamburgerNav = document.getElementById('hamburger-nav');
+  
+  // Always show desktop nav, hide hamburger nav
+  if (desktopNav) {
+    desktopNav.style.display = 'flex';
+    desktopNav.style.visibility = 'visible';
+  }
+  if (hamburgerNav) {
+    hamburgerNav.style.display = 'none';
+    hamburgerNav.style.visibility = 'hidden';
+  }
+}
+
 // EVENT LISTENERS
-document.addEventListener('DOMContentLoaded', initializeEffects);
-window.addEventListener('resize', debounce(handleResize, 250));
+document.addEventListener('DOMContentLoaded', () => {
+  initializeEffects();
+  ensureNavigationVisibility(); // Ensure proper navigation
+});
+window.addEventListener('resize', debounce(() => {
+  handleResize();
+  ensureNavigationVisibility(); // Ensure proper navigation on resize
+}, 250));
 
 // PRELOADER (Optional)
 function addPreloader() {

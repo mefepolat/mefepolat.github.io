@@ -25,6 +25,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -33,6 +34,8 @@ body {
   color: var(--text-primary);
   overflow-x: hidden;
   position: relative;
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* ANIMATED BACKGROUND */
@@ -229,6 +232,8 @@ a:hover {
   background-color: var(--primary-color);
   transition: var(--transition);
   box-shadow: 0 0 10px var(--primary-color);
+  display: block;
+  opacity: 1;
 }
 
 .menu-links {
@@ -249,7 +254,7 @@ a:hover {
   display: block;
   padding: 10px;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: var(--text-secondary);
   text-decoration: none;
 }
